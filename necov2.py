@@ -8,6 +8,8 @@ import cv2, sys
 add all colors mode
 """
 
+parts_list = ["boots", "hair", "hair_sub", "left_eye", "right_eye", "shirt", "skirt"]
+
 print("Necoarc generator v0.0.3")
 print()
 print(" Mode: ")
@@ -19,13 +21,10 @@ if modch=="1":
     number = int(input("Number: "))
 elif modch=="2":
     number = 1
-    boots = int(input("Boots(0-180): "))
-    hair = int(input("Hair(0-180): "))
-    hair_sub = int(input("Hair sub(0-180): "))
-    left_eye = int(input("Left eye(0-180): "))
-    right_eye = int(input("Right eye(0-180): "))
-    shirt = int(input("Shirt(0-180): "))
-    skirt = int(input("Skirt(0-180): "))
+    parts_custom_values = []
+    for i in parts_list:
+        part_value = int(input(i + "(0-180): "))
+        parts_custom_values.append(part_value)
 else:
     sys.exit(0)
 
@@ -33,27 +32,14 @@ print("Wait...")
 
 for i in range(number):
     newarc = cv2.imread("input/body.png")
-    for part in ["boots", "hair", "hair_sub", "left_eye", "right_eye", "shirt", "skirt"]:
-        picture = cv2.imread("input/" + part + ".png")
+    for part in range(len(parts_list)):
+        picture = cv2.imread("input/" + parts_list[part] + ".png")
         hsv = cv2.cvtColor(picture, cv2.COLOR_RGB2HSV)
         h = hsv[:,:,0]
         s = hsv[:,:,1]
         v = hsv[:,:,2]
         if modch=="2":
-            if part=="boots":
-                huechange = boots
-            elif part=="hair":
-                huechange = hair
-            elif part=="hair_sub":
-                huechange = hair_sub
-            elif part=="left_eye":
-                huechange = left_eye
-            elif part=="right_eye":
-                huechange = right_eye
-            elif part=="shirt":
-                huechange = shirt
-            elif part=="skirt":
-                huechange = skirt
+            huechange = parts_custom_values[part]
         elif modch=="1":
             huechange = randint(0,180)
         hnew = cv2.add(h, huechange)
